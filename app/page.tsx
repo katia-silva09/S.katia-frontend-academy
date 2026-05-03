@@ -18,7 +18,7 @@ export default function Home() {
               Gestiona la información de los estudiantes registrados.
             </p>
 
-            <Link href="/students">
+            <Link href="/estudiantes">
               <Button className="w-full bg-blue-500 hover:bg-blue-600">
                 Ver estudiantes
               </Button>
