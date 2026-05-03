@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 import {
   Dialog,
@@ -25,12 +26,16 @@ interface Props {
 export default function DeleteEntityDialog({ id, label, onDelete }: Props) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleDelete = async () => {
     try {
       setLoading(true);
       await onDelete(id);
+
       setOpen(false);
+
+      router.refresh();
     } catch (error) {
       console.error(`Error eliminando ${label}`, error);
     } finally {
