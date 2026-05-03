@@ -1,4 +1,5 @@
 import { getAllStudents } from '@/actions';
+import Link from 'next/link';
 
 export default async function ObtenerEstudiantes() {
   const estudiantes = await getAllStudents();
@@ -6,6 +7,11 @@ export default async function ObtenerEstudiantes() {
   return (
     <div>
       <h1 className="font-bold p-3">Estudiantes</h1>
+      <Link href="/estudiantes/create">
+        <button className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+          + Agregar
+        </button>
+      </Link>
       <div>
         <table>
           <thead>
