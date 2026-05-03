@@ -7,7 +7,7 @@ import FormStudent from './formStudent';
 import EntityViewDialog from '../ui/entityViewDialog';
 import { Pencil } from 'lucide-react';
 import DeleteEntityDialog from '../ui/deletEntityDialog';
-import EntityEditDialog from './EntityEditDialog';
+import EntityEditDialog from '../ui/EntityEditDialog';
 
 export default function TableStudents({ estudiantes }: any) {
   return (

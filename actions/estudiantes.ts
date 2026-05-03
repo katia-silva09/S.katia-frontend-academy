@@ -68,7 +68,7 @@ export async function deleteStudent(id: number) {
 
   console.log('STATUS:', res.status);
 
-  const data = await res.text(); // 👈 importante
+  const data = await res.text();
 
   console.log('RESPONSE:', data);
 
