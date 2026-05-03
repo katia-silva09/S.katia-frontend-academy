@@ -1,6 +1,7 @@
 'use client';
 
-import StudentModal from './studentModals';
+import ActionsMenu from './actionsMenu';
+import CreateStudentDialog from './createStudentDialog';
 
 export default function TableStudents({ estudiantes }: any) {
   return (
@@ -8,7 +9,7 @@ export default function TableStudents({ estudiantes }: any) {
       <div className="flex justify-between mb-4">
         <h1 className="font-bold text-xl">Estudiantes</h1>
 
-        <StudentModal />
+        <CreateStudentDialog />
       </div>
 
       <table className="min-w-full border">
@@ -29,6 +30,9 @@ export default function TableStudents({ estudiantes }: any) {
               <td className="p-3">{est.paterno}</td>
               <td className="p-3">{est.materno ?? '-'}</td>
               <td className="p-3">{est.direccion}</td>
+              <td className="p-3">
+                <ActionsMenu />
+              </td>
             </tr>
           ))}
         </tbody>
