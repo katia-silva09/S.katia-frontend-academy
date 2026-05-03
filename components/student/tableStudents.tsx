@@ -1,7 +1,13 @@
 'use client';
 
+import { deleteStudent } from '@/actions';
 import ActionsMenu from '../ui/actionsMenu';
+import DeleteEntityDialog from '../ui/deletEntityDialog';
 import CreateStudentDialog from './createStudentDialog';
+import EntityEditDialog from './EntityEditDialog';
+import FormStudent from './formStudent';
+import { DropdownMenuItem } from '../ui/dropdown-menu';
+import { Pencil } from 'lucide-react';
 
 export default function TableStudents({ estudiantes }: any) {
   return (
@@ -31,7 +37,30 @@ export default function TableStudents({ estudiantes }: any) {
               <td className="p-3">{est.materno ?? '-'}</td>
               <td className="p-3">{est.direccion}</td>
               <td className="p-3">
-                <ActionsMenu student={est} />
+                <ActionsMenu
+                  onEdit={
+                    <EntityEditDialog
+                      title="Editar estudiante"
+                      trigger={
+                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                          <Pencil className="w-4 h-4" />
+                          Editar
+                        </DropdownMenuItem>
+                      }
+                    >
+                      {({ close }) => (
+                        <FormStudent student={est} onSuccess={close} />
+                      )}
+                    </EntityEditDialog>
+                  }
+                  onDelete={
+                    <DeleteEntityDialog
+                      id={est.id}
+                      label="estudiante"
+                      onDelete={deleteStudent}
+                    />
+                  }
+                />{' '}
               </td>
             </tr>
           ))}

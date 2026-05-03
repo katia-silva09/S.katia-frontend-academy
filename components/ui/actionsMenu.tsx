@@ -4,15 +4,19 @@ import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
+  DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
 
 import { Button } from '@/components/ui/button';
 import { MoreVertical } from 'lucide-react';
-import DeleteEntityDialog from './deletEntityDialog';
-import { deleteStudent } from '@/actions';
-import EditStudentDialog from '../student/editStudentDialog';
 
-export default function ActionsMenu({ student }: any) {
+interface Props {
+  onEdit: React.ReactNode;
+  onDelete: React.ReactNode;
+  onView?: React.ReactNode;
+}
+
+export default function ActionsMenu({ onEdit, onDelete, onView }: Props) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -22,15 +26,11 @@ export default function ActionsMenu({ student }: any) {
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end">
-        <div className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100">
-          Ver
-        </div>
-        <EditStudentDialog student={student} />{' '}
-        <DeleteEntityDialog
-          id={student.id}
-          label="estudiante"
-          onDelete={deleteStudent}
-        />{' '}
+        {onView ?? <DropdownMenuItem>Ver</DropdownMenuItem>}
+
+        {onEdit}
+
+        {onDelete}
       </DropdownMenuContent>
     </DropdownMenu>
   );

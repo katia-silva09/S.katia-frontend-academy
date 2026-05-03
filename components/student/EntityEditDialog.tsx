@@ -10,25 +10,30 @@ import {
 } from '@/components/ui/dialog';
 
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import FormStudent from './formStudent';
 
-export default function EditStudentDialog({ student }: any) {
+interface Props {
+  title: string;
+  trigger: React.ReactNode;
+  children: (helpers: { close: () => void }) => React.ReactNode;
+}
+
+export default function EntityEditDialog({ title, trigger, children }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          Editar
+          {trigger}
         </DropdownMenuItem>
       </DialogTrigger>
 
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Editar estudiante</DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
 
-        <FormStudent student={student} onSuccess={() => setOpen(false)} />
+        {children({ close: () => setOpen(false) })}
       </DialogContent>
     </Dialog>
   );
