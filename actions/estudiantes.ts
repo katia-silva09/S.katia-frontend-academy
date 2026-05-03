@@ -25,11 +25,56 @@ export async function createStudent(data: any) {
   });
 
   const responseData = await res.json();
-  console.log('BODY:', responseData);
 
   if (!res.ok) {
     throw new Error(responseData?.message || 'Error al crear estudiante');
   }
 
   return responseData;
+}
+export async function updateStudent(id: number, data: any) {
+  const res = await fetch(`${URL}/estudiantes/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const responseData = await res.json();
+  console.log('BODY:', responseData);
+
+  if (!res.ok) {
+    throw new Error(responseData?.message || 'Error al actualizar estudiante');
+  }
+
+  return responseData;
+}
+
+export async function getStudentById(id: number) {
+  const res = await fetch(`${URL}/estudiantes/${id}`, {
+    cache: 'no-store',
+  });
+
+  if (!res.ok) throw new Error('Error al obtener estudiante');
+
+  return res.json();
+}
+
+export async function deleteStudent(id: number) {
+  const res = await fetch(`${URL}/estudiantes/${id}`, {
+    method: 'DELETE',
+  });
+
+  console.log('STATUS:', res.status);
+
+  const data = await res.text(); // 👈 importante
+
+  console.log('RESPONSE:', data);
+
+  if (!res.ok) {
+    throw new Error(data || 'Error eliminando estudiante');
+  }
+
+  return;
 }
