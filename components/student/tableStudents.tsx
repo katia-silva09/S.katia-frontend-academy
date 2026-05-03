@@ -1,20 +1,19 @@
 'use client';
 
-import { deleteStudent } from '@/actions';
+import { deleteStudent, getStudentById } from '@/actions';
 import ActionsMenu from '../ui/actionsMenu';
-import DeleteEntityDialog from '../ui/deletEntityDialog';
 import CreateStudentDialog from './createStudentDialog';
-import EntityEditDialog from './EntityEditDialog';
 import FormStudent from './formStudent';
-import { DropdownMenuItem } from '../ui/dropdown-menu';
+import EntityViewDialog from '../ui/entityViewDialog';
 import { Pencil } from 'lucide-react';
+import DeleteEntityDialog from '../ui/deletEntityDialog';
+import EntityEditDialog from './EntityEditDialog';
 
 export default function TableStudents({ estudiantes }: any) {
   return (
     <div>
       <div className="flex justify-between mb-4">
         <h1 className="font-bold text-xl">Estudiantes</h1>
-
         <CreateStudentDialog />
       </div>
 
@@ -36,17 +35,33 @@ export default function TableStudents({ estudiantes }: any) {
               <td className="p-3">{est.paterno}</td>
               <td className="p-3">{est.materno ?? '-'}</td>
               <td className="p-3">{est.direccion}</td>
+
               <td className="p-3">
                 <ActionsMenu
+                  onView={
+                    <EntityViewDialog
+                      title="Detalle estudiante"
+                      id={est.id}
+                      fetcher={getStudentById}
+                      render={(data) => (
+                        <div className="space-y-2">
+                          <p>
+                            <b>Nombre:</b> {data.nombres}
+                          </p>
+                          <p>
+                            <b>Apellido:</b> {data.paterno}
+                          </p>
+                          <p>
+                            <b>Dirección:</b> {data.direccion}
+                          </p>
+                        </div>
+                      )}
+                    />
+                  }
                   onEdit={
                     <EntityEditDialog
                       title="Editar estudiante"
-                      trigger={
-                        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-                          <Pencil className="w-4 h-4" />
-                          Editar
-                        </DropdownMenuItem>
-                      }
+                      trigger={<div>Editar</div>}
                     >
                       {({ close }) => (
                         <FormStudent student={est} onSuccess={close} />
@@ -60,7 +75,7 @@ export default function TableStudents({ estudiantes }: any) {
                       onDelete={deleteStudent}
                     />
                   }
-                />{' '}
+                />
               </td>
             </tr>
           ))}

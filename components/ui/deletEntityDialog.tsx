@@ -29,9 +29,7 @@ export default function DeleteEntityDialog({ id, label, onDelete }: Props) {
   const handleDelete = async () => {
     try {
       setLoading(true);
-
       await onDelete(id);
-
       setOpen(false);
     } catch (error) {
       console.error(`Error eliminando ${label}`, error);
@@ -43,7 +41,7 @@ export default function DeleteEntityDialog({ id, label, onDelete }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <div className="px-3 py-2 text-sm cursor-pointer hover:bg-red-100 text-red-600 flex items-center gap-2">
+        <div className="flex items-center gap-2 px-1 py-2 text-sm cursor-pointer text-red-600 hover:bg-red-100 rounded-md">
           <Trash2 className="w-4 h-4" />
           Eliminar
         </div>
