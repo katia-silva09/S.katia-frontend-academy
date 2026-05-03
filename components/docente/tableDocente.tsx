@@ -44,19 +44,37 @@ export default function TableDocentes({ docentes }: any) {
                       title="Detalle del docente"
                       id={doc.id}
                       fetcher={getDocenteById}
-                      render={(data) => (
-                        <div className="space-y-2">
-                          <p>
-                            <b>Nombre:</b> {data.nombres}
-                          </p>
-                          <p>
-                            <b>Apellido:</b> {data.paterno}
-                          </p>
-                          <p>
-                            <b>Dirección:</b> {data.direccion}
-                          </p>
-                        </div>
-                      )}
+                      render={(response) => {
+                        const data = response.data;
+                        console.log('DOCENTE RESPONSE:', data);
+                        return (
+                          <div className="space-y-2">
+                            <p>
+                              <b>Nombres:</b> {data.nombres}
+                            </p>
+
+                            <p>
+                              <b>Apellidos:</b> {data.apellidos}
+                            </p>
+
+                            <p>
+                              <b>Email:</b> {data.email ?? '-'}
+                            </p>
+
+                            <p>
+                              <b>Dirección:</b> {data.direccion ?? '-'}
+                            </p>
+
+                            <p>
+                              <b>Teléfono:</b> {data.telefono ?? '-'}
+                            </p>
+
+                            <p>
+                              <b>Cédula:</b> {data.cedula ?? '-'}
+                            </p>
+                          </div>
+                        );
+                      }}
                     />
                   }
                   onEdit={
