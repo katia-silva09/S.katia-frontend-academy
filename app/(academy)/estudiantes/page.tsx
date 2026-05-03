@@ -1,5 +1,5 @@
 import { getAllStudents } from '@/actions';
-import TableStudents from '@/components/ui/tableStudents';
+import TableStudents from '@/components/student/tableStudents';
 
 export default async function ObtenerEstudiantes() {
   const estudiantes = await getAllStudents();

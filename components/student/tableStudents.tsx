@@ -1,6 +1,6 @@
 'use client';
 
-import ActionsMenu from './actionsMenu';
+import ActionsMenu from '../ui/actionsMenu';
 import CreateStudentDialog from './createStudentDialog';
 
 export default function TableStudents({ estudiantes }: any) {

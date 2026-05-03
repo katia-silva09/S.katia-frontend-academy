@@ -60,3 +60,21 @@ export async function getStudentById(id: number) {
 
   return res.json();
 }
+
+export async function deleteStudent(id: number) {
+  const res = await fetch(`${URL}/estudiantes/${id}`, {
+    method: 'DELETE',
+  });
+
+  console.log('STATUS:', res.status);
+
+  const data = await res.text(); // 👈 importante
+
+  console.log('RESPONSE:', data);
+
+  if (!res.ok) {
+    throw new Error(data || 'Error eliminando estudiante');
+  }
+
+  return;
+}
