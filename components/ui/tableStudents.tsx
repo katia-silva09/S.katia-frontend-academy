@@ -31,7 +31,7 @@ export default function TableStudents({ estudiantes }: any) {
               <td className="p-3">{est.materno ?? '-'}</td>
               <td className="p-3">{est.direccion}</td>
               <td className="p-3">
-                <ActionsMenu />
+                <ActionsMenu student={est} />
               </td>
             </tr>
           ))}

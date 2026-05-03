@@ -32,9 +32,9 @@ export async function createStudent(data: any) {
 
   return responseData;
 }
-export async function UpdateStudent(id: number, data: any) {
+export async function updateStudent(id: number, data: any) {
   const res = await fetch(`${URL}/estudiantes/${id}`, {
-    method: 'PATCH',
+    method: 'PUT',
     body: JSON.stringify(data),
     headers: {
       'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
 'use client';
 
-import { createStudent, UpdateStudent } from '@/actions';
+import { createStudent, updateStudent } from '@/actions';
 import { useRouter } from 'next/navigation';
 
 export default function FormStudent({
@@ -18,24 +18,31 @@ export default function FormStudent({
 
     const formData = new FormData(e.currentTarget);
 
-    const data = {
+    const raw = {
       nombres: formData.get('nombres'),
       paterno: formData.get('paterno'),
-      materno: formData.get('materno') || null,
-      sexo_id: Number(formData.get('sexo_id')),
+      materno: formData.get('materno'),
+      sexo_id: formData.get('sexo_id'),
       direccion: formData.get('direccion'),
-      etnia_id: Number(formData.get('etnia_id')),
+      etnia_id: formData.get('etnia_id'),
     };
+
+    const data: any = {};
+
+    Object.entries(raw).forEach(([key, value]) => {
+      if (value !== null && value !== '') {
+        data[key] = key.includes('_id') ? Number(value) : String(value);
+      }
+    });
 
     try {
       if (isEdit) {
-        await UpdateStudent(student.id, data);
+        await updateStudent(student.id, data);
       } else {
         await createStudent(data);
       }
 
       onSuccess?.();
-
       router.refresh();
     } catch (error) {
       console.error(error);
@@ -49,7 +56,7 @@ export default function FormStudent({
         name="nombres"
         placeholder="Nombres"
         defaultValue={student?.nombres}
-        required
+        required={!isEdit}
         className="border p-2 rounded"
       />
 
@@ -57,7 +64,7 @@ export default function FormStudent({
         name="paterno"
         placeholder="Apellido paterno"
         defaultValue={student?.paterno}
-        required
+        required={!isEdit}
         className="border p-2 rounded"
       />
 
@@ -71,7 +78,7 @@ export default function FormStudent({
       <select
         name="sexo_id"
         defaultValue={student?.sexo_id || ''}
-        required
+        required={!isEdit}
         className="border p-2 rounded"
       >
         <option value="">Seleccione sexo</option>
@@ -83,14 +90,14 @@ export default function FormStudent({
         name="direccion"
         placeholder="Dirección"
         defaultValue={student?.direccion}
-        required
+        required={!isEdit}
         className="border p-2 rounded"
       />
 
       <select
         name="etnia_id"
         defaultValue={student?.etnia_id || ''}
-        required
+        required={!isEdit}
         className="border p-2 rounded"
       >
         <option value="">Seleccione etnia</option>

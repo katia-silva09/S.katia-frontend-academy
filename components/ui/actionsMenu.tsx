@@ -8,6 +8,7 @@ import {
 
 import { Button } from '@/components/ui/button';
 import { MoreVertical } from 'lucide-react';
+import EditStudentDialog from './editStudentDialog';
 
 export default function ActionsMenu({ student }: any) {
   return (
@@ -22,9 +23,7 @@ export default function ActionsMenu({ student }: any) {
         <div className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100">
           Ver
         </div>
-        <div className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100">
-          editar
-        </div>
+        <EditStudentDialog student={student} />{' '}
         <div className="px-3 py-2 text-sm cursor-pointer hover:bg-gray-100">
           eliminar
         </div>
