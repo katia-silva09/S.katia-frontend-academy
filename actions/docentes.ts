@@ -60,3 +60,20 @@ export async function getDocenteById(id: number) {
 
   return res.json();
 }
+
+export async function deleteDocente(id: number) {
+  const res = await fetch(`${URL}/docentes/${id}`, {
+    method: 'DELETE',
+  });
+
+  console.log('STATUS:', res.status);
+
+  const data = await res.text();
+  console.log('RESPONSE:', data);
+
+  if (!res.ok) {
+    throw new Error(data || 'Error eliminando docente');
+  }
+
+  return;
+}
