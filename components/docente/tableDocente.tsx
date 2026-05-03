@@ -1,10 +1,13 @@
 'use client';
 
+import CreateDocenteDialog from './createDocenteDialog';
+
 export default function TableDocentes({ docentes }: any) {
   return (
     <div>
       <div className="flex justify-between mb-4">
         <h1 className="font-bold text-xl">Docentes</h1>
+        <CreateDocenteDialog />
       </div>
 
       <table className="min-w-full border">
