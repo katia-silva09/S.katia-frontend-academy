@@ -1,0 +1,41 @@
+# 1. Dependencias
+
+FROM node:20-alpine as deps
+
+WORKDIR /usr/src/app
+
+COPY package.json ./
+COPY package-lock.json ./
+
+RUN npm install
+
+# 2. Build
+
+FROM node:20-alpine as build
+
+WORKDIR /usr/src/app
+
+COPY --from=deps /usr/src/app/node_modules ./node_modules
+COPY . .
+
+# 3. Test
+
+RUN npm run build
+
+RUN npm ci -f --only=production && npm cache clean --force
+
+# 4. Prod
+
+FROM node:20-alpine as prod
+
+WORKDIR /usr/src/app
+
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/.next ./.next
+
+ENV NODE_ENV=production
+
+#EXPOSE Y COLOCAS EL NUMERO DEL PUERTO EN EL QUE CORRE TU MICROSERVICIO
+EXPOSE 3001
+
+CMD ["node", "dist/main.js"]
