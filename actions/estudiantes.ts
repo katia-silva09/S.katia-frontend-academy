@@ -1,7 +1,6 @@
 import { Estudiante } from '@/types/estudiantes.interface';
 
-const URL = `${process.env.GATEWAY_URL}`;
-
+const URL = process.env.NEXT_PUBLIC_GATEWAY_URL;
 export async function getAllStudents(): Promise<Estudiante[]> {
   const response = await fetch(`${URL}/estudiantes`, { cache: 'no-store' });
 
