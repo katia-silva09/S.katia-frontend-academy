@@ -1,6 +1,6 @@
 import { Estudiante } from '@/types/estudiantes.interface';
 
-const URL = process.env.NEXT_PUBLIC_GATEWAY_URL;
+const URL = 'http://localhost:3000';
 export async function getAllStudents(): Promise<Estudiante[]> {
   const response = await fetch(`${URL}/estudiantes`, { cache: 'no-store' });
 
