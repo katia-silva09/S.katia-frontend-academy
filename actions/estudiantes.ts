@@ -88,21 +88,10 @@ export async function updateStudentAvatar(id: number, file: File) {
   return responseData;
 }
 
-export async function getStudentAvatar(id: number) {
-  const res = await fetch(`${URL}/estudiantes/${id}/avatar`, {
-    cache: 'no-store',
-  });
+export function getStudentAvatar(id: number) {
+  if (!URL) throw new Error('NEXT_PUBLIC_GATEWAY_URL not defined');
 
-  if (!res.ok) return null;
-
-  const data = await res.json().catch(() => null);
-
-  if (!data?.file_name) return null;
-
-  return {
-    url: `${URL}/files/${data.file_name}`,
-    mime: data.mime,
-  };
+  return `${URL}/estudiantes/${id}/avatar`;
 }
 export async function getStudentById(id: number) {
   const res = await fetch(`${URL}/estudiantes/${id}`, {
