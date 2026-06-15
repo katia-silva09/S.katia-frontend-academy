@@ -1,11 +1,15 @@
 'use client';
 
-import { deleteStudent, getStudentById } from '@/actions';
+import {
+  deleteStudent,
+  getStudentAvatar,
+  getStudentById,
+  uploadStudentAvatar,
+} from '@/actions';
 import ActionsMenu from '../ui/actionsMenu';
 import CreateStudentDialog from './createStudentDialog';
 import FormStudent from './formStudent';
 import EntityViewDialog from '../ui/entityViewDialog';
-import { Pencil } from 'lucide-react';
 import DeleteEntityDialog from '../ui/deletEntityDialog';
 import EntityEditDialog from '../ui/EntityEditDialog';
 
@@ -42,17 +46,39 @@ export default function TableStudents({ estudiantes }: any) {
                     <EntityViewDialog
                       title="Detalle estudiante"
                       id={est.id}
-                      fetcher={getStudentById}
-                      render={(data) => (
-                        <div className="space-y-2">
+                      fetcher={async (id) => {
+                        const [student, avatar] = await Promise.all([
+                          getStudentById(id),
+                          getStudentAvatar(id),
+                        ]);
+
+                        return {
+                          student,
+                          avatar: avatar ?? null,
+                        };
+                      }}
+                      render={({ student, avatar }) => (
+                        <div className="space-y-3">
+                          <div>
+                            {avatar?.url ? (
+                              <img
+                                src={avatar.url}
+                                className="w-24 h-24 rounded-full object-cover"
+                                alt="avatar"
+                              />
+                            ) : (
+                              <div className="w-24 h-24 rounded-full bg-gray-200" />
+                            )}
+                          </div>
+
                           <p>
-                            <b>Nombre:</b> {data.nombres}
+                            <b>Nombre:</b> {student?.nombres}
                           </p>
                           <p>
-                            <b>Apellido:</b> {data.paterno}
+                            <b>Apellido:</b> {student?.paterno}
                           </p>
                           <p>
-                            <b>Dirección:</b> {data.direccion}
+                            <b>Dirección:</b> {student?.direccion}
                           </p>
                         </div>
                       )}
@@ -75,7 +101,20 @@ export default function TableStudents({ estudiantes }: any) {
                       onDelete={deleteStudent}
                     />
                   }
-                />
+                />{' '}
+                <label className="text-blue-600 hover:underline text-sm cursor-pointer">
+                  Subir avatar
+                  <input
+                    type="file"
+                    hidden
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+
+                      await uploadStudentAvatar(est.id, file);
+                    }}
+                  />
+                </label>
               </td>
             </tr>
           ))}

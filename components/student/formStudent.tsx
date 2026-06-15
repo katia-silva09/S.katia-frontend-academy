@@ -1,6 +1,6 @@
 'use client';
 
-import { createStudent, updateStudent } from '@/actions';
+import { createStudent, updateStudent, updateStudentAvatar } from '@/actions';
 import { useRouter } from 'next/navigation';
 
 export default function FormStudent({
@@ -18,26 +18,32 @@ export default function FormStudent({
 
     const formData = new FormData(e.currentTarget);
 
-    const raw = {
-      nombres: formData.get('nombres'),
-      paterno: formData.get('paterno'),
-      materno: formData.get('materno'),
-      sexo_id: formData.get('sexo_id'),
-      direccion: formData.get('direccion'),
-      etnia_id: formData.get('etnia_id'),
-    };
-
-    const data: any = {};
-
-    Object.entries(raw).forEach(([key, value]) => {
-      if (value !== null && value !== '') {
-        data[key] = key.includes('_id') ? Number(value) : String(value);
-      }
-    });
+    const file = formData.get('avatar') as File;
 
     try {
+      const raw = {
+        nombres: formData.get('nombres'),
+        paterno: formData.get('paterno'),
+        materno: formData.get('materno'),
+        sexo_id: formData.get('sexo_id'),
+        direccion: formData.get('direccion'),
+        etnia_id: formData.get('etnia_id'),
+      };
+
+      const data: Record<string, string | number> = {};
+
+      Object.entries(raw).forEach(([key, value]) => {
+        if (value !== null && value !== '') {
+          data[key] = key.includes('_id') ? Number(value) : String(value);
+        }
+      });
+
       if (isEdit) {
         await updateStudent(student.id, data);
+
+        if (file && file.size > 0) {
+          await updateStudentAvatar(student.id, file);
+        }
       } else {
         await createStudent(data);
       }
@@ -104,6 +110,15 @@ export default function FormStudent({
         <option value="1">Mestizo</option>
         <option value="2">Indígena</option>
       </select>
+
+      {isEdit && (
+        <input
+          type="file"
+          name="avatar"
+          accept="image/*"
+          className="border p-2 rounded"
+        />
+      )}
 
       <button className="bg-green-500 text-white p-2 rounded hover:bg-green-600">
         {isEdit ? 'Actualizar' : 'Crear'}

@@ -32,6 +32,25 @@ export async function createStudent(data: any) {
 
   return responseData;
 }
+
+export async function uploadStudentAvatar(studentId: number, file: File) {
+  const formData = new FormData();
+
+  formData.append('file', file);
+  formData.append('model_id', String(studentId));
+
+  const res = await fetch(`${URL}/files`, {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || 'Error subiendo avatar');
+  }
+
+  return res.json();
+}
 export async function updateStudent(id: number, data: any) {
   const res = await fetch(`${URL}/estudiantes/${id}`, {
     method: 'PUT',
@@ -51,6 +70,40 @@ export async function updateStudent(id: number, data: any) {
   return responseData;
 }
 
+export async function updateStudentAvatar(id: number, file: File) {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  const res = await fetch(`${URL}/estudiantes/${id}/avatar`, {
+    method: 'PUT',
+    body: formData,
+  });
+
+  const responseData = await res.json();
+
+  if (!res.ok) {
+    throw new Error(responseData?.message || 'Error al subir avatar');
+  }
+
+  return responseData;
+}
+
+export async function getStudentAvatar(id: number) {
+  const res = await fetch(`${URL}/estudiantes/${id}/avatar`, {
+    cache: 'no-store',
+  });
+
+  if (!res.ok) return null;
+
+  const data = await res.json().catch(() => null);
+
+  if (!data?.file_name) return null;
+
+  return {
+    url: `${URL}/files/${data.file_name}`,
+    mime: data.mime,
+  };
+}
 export async function getStudentById(id: number) {
   const res = await fetch(`${URL}/estudiantes/${id}`, {
     cache: 'no-store',
