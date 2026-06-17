@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  deleteFileByModel,
   deleteStudent,
   getStudentAvatar,
   getStudentById,
@@ -47,14 +48,13 @@ export default function TableStudents({ estudiantes }: any) {
                       title="Detalle estudiante"
                       id={est.id}
                       fetcher={async (id) => {
-                        const [student, avatar] = await Promise.all([
-                          getStudentById(id),
-                          getStudentAvatar(id),
-                        ]);
+                        const student = await getStudentById(id);
 
                         return {
                           student,
-                          avatar: avatar ?? null,
+                          avatar: {
+                            url: getStudentAvatar(id),
+                          },
                         };
                       }}
                       render={({ student, avatar }) => (
@@ -63,8 +63,11 @@ export default function TableStudents({ estudiantes }: any) {
                             {avatar?.url ? (
                               <img
                                 src={avatar.url}
-                                className="w-24 h-24 rounded-full object-cover"
-                                alt="avatar"
+                                alt="Avatar del estudiante"
+                                className="w-24 h-24 rounded-full object-cover border"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                }}
                               />
                             ) : (
                               <div className="w-24 h-24 rounded-full bg-gray-200" />
@@ -74,9 +77,11 @@ export default function TableStudents({ estudiantes }: any) {
                           <p>
                             <b>Nombre:</b> {student?.nombres}
                           </p>
+
                           <p>
                             <b>Apellido:</b> {student?.paterno}
                           </p>
+
                           <p>
                             <b>Dirección:</b> {student?.direccion}
                           </p>
@@ -115,6 +120,26 @@ export default function TableStudents({ estudiantes }: any) {
                     }}
                   />
                 </label>
+                <button
+                  onClick={async () => {
+                    const confirm = window.confirm(
+                      '¿Seguro que deseas eliminar el avatar?',
+                    );
+
+                    if (!confirm) return;
+
+                    try {
+                      await deleteFileByModel(est.id);
+                      alert('Avatar eliminado');
+                    } catch (err) {
+                      console.error(err);
+                      alert('Error eliminando avatar');
+                    }
+                  }}
+                  className="text-red-600 hover:underline text-sm ml-3"
+                >
+                  Eliminar avatar
+                </button>
               </td>
             </tr>
           ))}

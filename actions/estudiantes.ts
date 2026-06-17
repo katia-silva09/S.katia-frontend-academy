@@ -89,8 +89,6 @@ export async function updateStudentAvatar(id: number, file: File) {
 }
 
 export function getStudentAvatar(id: number) {
-  if (!URL) throw new Error('NEXT_PUBLIC_GATEWAY_URL not defined');
-
   return `${URL}/estudiantes/${id}/avatar`;
 }
 export async function getStudentById(id: number) {
@@ -119,4 +117,14 @@ export async function deleteStudent(id: number) {
   }
 
   return;
+}
+
+export async function deleteFileByModel(id: number) {
+  const res = await fetch(`${URL}/files/students/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!res.ok) {
+    throw new Error('Error eliminando archivo');
+  }
 }
