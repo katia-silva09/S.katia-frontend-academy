@@ -3,6 +3,7 @@
 import {
   deleteFileByModel,
   deleteStudent,
+  getFileByModel,
   getStudentAvatar,
   getStudentById,
   uploadStudentAvatar,
@@ -13,6 +14,8 @@ import FormStudent from './formStudent';
 import EntityViewDialog from '../ui/entityViewDialog';
 import DeleteEntityDialog from '../ui/deletEntityDialog';
 import EntityEditDialog from '../ui/EntityEditDialog';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { User } from 'lucide-react';
 
 export default function TableStudents({ estudiantes }: any) {
   return (
@@ -50,28 +53,33 @@ export default function TableStudents({ estudiantes }: any) {
                       fetcher={async (id) => {
                         const student = await getStudentById(id);
 
+                        const avatar = await getFileByModel(id);
+
                         return {
                           student,
-                          avatar: {
-                            url: getStudentAvatar(id),
-                          },
+                          avatar,
                         };
                       }}
                       render={({ student, avatar }) => (
                         <div className="space-y-3">
-                          <div>
-                            {avatar?.url ? (
-                              <img
-                                src={avatar.url}
-                                alt="Avatar del estudiante"
-                                className="w-24 h-24 rounded-full object-cover border"
-                                onError={(e) => {
-                                  e.currentTarget.style.display = 'none';
-                                }}
-                              />
-                            ) : (
-                              <div className="w-24 h-24 rounded-full bg-gray-200" />
-                            )}
+                          <div className="flex justify-center">
+                            <Avatar className="w-24 h-24">
+                              {avatar ? (
+                                <AvatarImage
+                                  src={getStudentAvatar(student.id)}
+                                  alt="Avatar del estudiante"
+                                />
+                              ) : null}
+
+                              <AvatarFallback>
+                                {student?.nombres?.[0] ||
+                                student?.paterno?.[0] ? (
+                                  `${student?.nombres?.[0] ?? ''}${student?.paterno?.[0] ?? ''}`
+                                ) : (
+                                  <User className="h-10 w-10" />
+                                )}
+                              </AvatarFallback>
+                            </Avatar>
                           </div>
 
                           <p>

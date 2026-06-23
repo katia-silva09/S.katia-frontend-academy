@@ -91,6 +91,25 @@ export async function updateStudentAvatar(id: number, file: File) {
 export function getStudentAvatar(id: number) {
   return `${URL}/estudiantes/${id}/avatar`;
 }
+export async function getFileByModel(modelId: number) {
+  const res = await fetch(`${URL}/files/model/${modelId}`);
+
+  const text = await res.text();
+
+  if (!res.ok) {
+    return null;
+  }
+
+  if (!text) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
 export async function getStudentById(id: number) {
   const res = await fetch(`${URL}/estudiantes/${id}`, {
     cache: 'no-store',
